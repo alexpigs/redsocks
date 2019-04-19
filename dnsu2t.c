@@ -375,7 +375,7 @@ static int dnsu2t_onexit(parser_section *section)
 static int dnsu2t_init_instance(dnsu2t_instance *instance)
 {
 	int error;
-	int fd = red_socket_server(SOCK_DGRAM, &instance->config.bindaddr);
+	int fd = red_socket_server(SOCK_DGRAM, &instance->config.bindaddr, NULL);
 
 	if (fd == -1) {
 		goto fail;

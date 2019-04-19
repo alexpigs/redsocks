@@ -19,8 +19,6 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <sys/ioctl.h>
-#include <net/if.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
@@ -1377,19 +1375,11 @@ static int redsocks_init_instance(redsocks_instance *instance)
 	 */
 	int error;
 	int fd = -1;
-	struct ifreq ifr;
 
 
-	fd = red_socket_server(SOCK_STREAM, &instance->config.bindaddr);
+	fd = red_socket_server(SOCK_STREAM, &instance->config.bindaddr, instance->config.bind_if);
 	if (fd == -1) {
 		goto fail;
-	}
-
-
-	memset(&ifr, 0, sizeof(ifr));
-	snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), instance->config.bind_if);
-	if (setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, (void *)&ifr, sizeof(ifr)) < 0) {
-			goto fail;
 	}
 
 	error = listen(fd, instance->config.listenq);

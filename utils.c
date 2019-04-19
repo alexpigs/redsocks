@@ -20,6 +20,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "log.h"
@@ -154,7 +156,7 @@ fail:
 	return -1;
 }
 
-int red_socket_server(int type, struct sockaddr_in *bindaddr)
+int red_socket_server(int type, struct sockaddr_in *bindaddr, char *ifname)
 {
 	int on = 1;
 	int error;
@@ -167,6 +169,17 @@ int red_socket_server(int type, struct sockaddr_in *bindaddr)
 		log_errno(LOG_ERR, "setsockopt");
 		goto fail;
 	}
+
+	if (ifname){
+		log_errno(LOG_WARNING, "bind_if");
+		memset(&ifr, 0, sizeof(ifr));
+		snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), ifname);
+		if (setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, (void *)&ifr, sizeof(ifr)) < 0) {
+			log_errno(LOG_ERR, "SO_BINDTODEVICE");
+				goto fail;
+		}
+	}
+
 
 	error = bind(fd, (struct sockaddr*)bindaddr, sizeof(*bindaddr));
 	if (error) {
