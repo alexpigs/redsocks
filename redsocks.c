@@ -54,12 +54,14 @@ static void redsocks_conn_list_del(redsocks_client *client);
 
 extern relay_subsys http_connect_subsys;
 extern relay_subsys http_relay_subsys;
+extern relay_subsys http_upsteam_subsys;
 extern relay_subsys socks4_subsys;
 extern relay_subsys socks5_subsys;
 static relay_subsys *relay_subsystems[] =
 {
 	&http_connect_subsys,
 	&http_relay_subsys,
+	&http_upsteam_subsys,
 	&socks4_subsys,
 	&socks5_subsys,
 };
