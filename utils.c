@@ -160,6 +160,7 @@ int red_socket_server(int type, struct sockaddr_in *bindaddr, char *ifname)
 {
 	int on = 1;
 	int error;
+	struct ifreq ifr;
 	int fd = red_socket_client(type);
 	if (fd == -1)
 		goto fail;
