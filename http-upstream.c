@@ -405,6 +405,10 @@ static int httpu_toss_http_firstline(redsocks_client *client)
 		goto fail;
 	}
 
+
+	if (httpu_buffer_append(&nbuff, httpu->firstline, strlen(httpu->firstline) != 0)
+		goto addition_fail;
+	/*
 	if (httpu_buffer_append(&nbuff, httpu->firstline, uri - httpu->firstline) != 0)
 		goto addition_fail;
 	if (httpu_buffer_append(&nbuff, "http://", 7) != 0)
@@ -415,6 +419,7 @@ static int httpu_toss_http_firstline(redsocks_client *client)
 		goto addition_fail;
 	if (httpu_buffer_append(&nbuff, "\x0d\x0a", 2) != 0)
 		goto addition_fail;
+		*/
 
 	free(httpu->firstline);
 
