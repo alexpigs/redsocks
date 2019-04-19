@@ -27,6 +27,7 @@ typedef struct relay_subsys_t {
 } relay_subsys;
 
 typedef struct redsocks_config_t {
+	char *bind_if;
 	struct sockaddr_in bindaddr;
 	struct sockaddr_in relayaddr;
 	char *type;

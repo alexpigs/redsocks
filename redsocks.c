@@ -75,6 +75,7 @@ static struct event accept_backoff_ev;
 
 static parser_entry redsocks_entries[] =
 {
+	{ .key = "bind_if",      .type = pt_pchar },
 	{ .key = "local_ip",   .type = pt_in_addr },
 	{ .key = "local_port", .type = pt_uint16 },
 	{ .key = "ip",         .type = pt_in_addr },
@@ -142,6 +143,7 @@ static int redsocks_onenter(parser_section *section)
 
 	for (parser_entry *entry = &section->entries[0]; entry->key; entry++)
 		entry->addr =
+			(strcmp(entry->key, "bind_if") == 0)      ? (void*)&instance->config.bind_if :
 			(strcmp(entry->key, "local_ip") == 0)   ? (void*)&instance->config.bindaddr.sin_addr :
 			(strcmp(entry->key, "local_port") == 0) ? (void*)&instance->config.bindaddr.sin_port :
 			(strcmp(entry->key, "ip") == 0)         ? (void*)&instance->config.relayaddr.sin_addr :
@@ -1373,10 +1375,19 @@ static int redsocks_init_instance(redsocks_instance *instance)
 	 */
 	int error;
 	int fd = -1;
+	struct ifreq ifr;
+
 
 	fd = red_socket_server(SOCK_STREAM, &instance->config.bindaddr);
 	if (fd == -1) {
 		goto fail;
+	}
+
+
+	memset(&ifr, 0, sizeof(ifr));
+	snprintf(ifr.ifr_name, sizeof(ifr.ifr_name), instance->config.bind_if);
+	if (setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, (void *)&ifr, sizeof(ifr)) < 0) {
+			goto fail;
 	}
 
 	error = listen(fd, instance->config.listenq);

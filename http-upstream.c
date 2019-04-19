@@ -121,7 +121,7 @@ static void httpu_client_fini(redsocks_client *client)
 
 static void httpu_instance_init(redsocks_instance *instance)
 {
-	log_error(LOG_WARNING, "You should avoid `http-relay`, e.g. due to CVE-2009-0801");
+	log_error(LOG_WARNING, "You should avoid `http-upstream`, e.g. due to CVE-2009-0801");
 }
 
 static void httpu_instance_fini(redsocks_instance *instance)
