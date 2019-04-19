@@ -557,7 +557,7 @@ static void httpu_connect_relay(redsocks_client *client)
 	}
 }
 
-relay_subsys http_upsteam_subsys =
+relay_subsys http_upstream_subsys =
 {
 	.name                 = "http-upstream",
 	.payload_len          = sizeof(httpu_client),
