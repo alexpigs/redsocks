@@ -406,7 +406,7 @@ static int httpu_toss_http_firstline(redsocks_client *client)
 	}
 
 
-	if (httpu_buffer_append(&nbuff, httpu->firstline, strlen(httpu->firstline) != 0)
+	if (httpu_buffer_append(&nbuff, httpu->firstline, strlen(httpu->firstline)) != 0)
 		goto addition_fail;
 	/*
 	if (httpu_buffer_append(&nbuff, httpu->firstline, uri - httpu->firstline) != 0)
